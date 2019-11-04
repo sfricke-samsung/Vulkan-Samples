@@ -1,4 +1,7 @@
-version: '{build}'
+version: "{build}"
+
+init:
+  - cmd: echo init
 
 branches:
   only:
@@ -9,25 +12,28 @@ image:
   - Ubuntu
 
 platform:
-- x64
+  - x64
 
 configuration:
   - Release
   - Debug
 
+before_build:
+  - cmd: |- 
+    echo fuck
+    cmake -B"." -H"."
+
 for:
-  -
-    matrix:
+  - matrix:
       only:
         - configuration: Release
     build_script:
-      - cmd: cmake -Bbuild -H"."
-      - cmd: cmake --build build --config Debug --target vulkan_samples
-  -
-    matrix:
+      - cmd: cmake --build . --config Release --target vulkan_samples
+  - matrix:
       only:
         - configuration: Debug
     build_script:
-      - cmd: cmake -Bbuild -H"."
-      - cmd: cmake --build build --config Debug --target vulkan_samples
+      - cmd: cmake --build . --config Debug --target vulkan_samples
 
+before_test:
+  - cmd: echo hello
